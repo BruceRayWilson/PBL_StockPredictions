@@ -17,9 +17,9 @@ class StockData:
     """Class to collect stock market data"""
 
     @staticmethod
-    def exec(self, symbols_list: list, start_time: datetime, end_time: datetime) -> None:
+    def exec(csv_filename: str, start_time: datetime, end_time: datetime) -> None:
         '''Executes the StockData class. Prints the symbols along with start and end time'''
-        print(f"Collecting data for '{symbols_list}' from '{start_time}' to '{end_time}'")
+        print(f"Collecting data using '{csv_filename}' from '{start_time}' to '{end_time}'")
 
 
 class StockPreprocessor:
@@ -53,6 +53,8 @@ def add_args():
                         help="CSV filename for StockSymbolCollection (default: %(default)s)")
     parser.add_argument("-tf", "--train_filename", default='train.csv',
                         help="CSV filename to get the list of stock symbols for StockData (default: %(default)s)")
+    parser.add_argument("-csd", "--collect_stock_data", action='store_true',
+                        help="Flag to collect stock data (default: %(default)s)")
     parser.add_argument("-st", "--start_time", default="2023-01-01",
                         help="Start time for StockData in the format YYYY-MM-DD (default: %(default)s)")
     parser.add_argument("-et", "--end_time", default="2023-10-01",
@@ -71,17 +73,18 @@ def main() -> None:
     args = add_args()
     if args.create_stock_collection:
         StockSymbolCollection.exec(args.train_base_filename)
-    # if args.symbols and args.start_time and args.end_time:
-    #     symbols_list = args.symbols.split(',')
-    #     start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
-    #     end_time = datetime.strptime(args.end_time, '%Y-%m-%d')
-    #     StockData.exec(symbols_list, start_time, end_time)
+    if args.collect_stock_data:
+        start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
+        end_time   = datetime.strptime(args.end_time,   '%Y-%m-%d')
+        StockData.exec(args.train_filename, start_time, end_time)
     if args.preprocess:
         StockPreprocessor.exec()
     if args.train:
         LLM.train()
     if args.predict:
         LLM.predict()
+
+    print("Done!")
 
 
 def menu() -> None:
