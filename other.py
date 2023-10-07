@@ -47,42 +47,35 @@ class LLM:
 def add_args():
     """Function to add command line arguments"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("-cc", "--create_stock_collection", action="store_true",
-                        help="Flag to create a stock collection (default: %(default)s)")
-    parser.add_argument("-tb", "--train_base_filename", default='train_base.csv',
-                        help="CSV filename for StockSymbolCollection (default: %(default)s)")
-    parser.add_argument("-tf", "--train_filename", default='train.csv',
-                        help="CSV filename to get the list of stock symbols for StockData (default: %(default)s)")
-    parser.add_argument("-st", "--start_time", default="2023-01-01",
-                        help="Start time for StockData in the format YYYY-MM-DD (default: %(default)s)")
-    parser.add_argument("-et", "--end_time", default="2023-10-01",
-                        help="End time for StockData in the format YYYY-MM-DD (default: %(default)s)")
-    parser.add_argument("-pp", "--preprocess", action='store_true', help="Execute StockPreprocessor (default: %(default)s)")
-    parser.add_argument("-train", action='store_true', help="Execute LLM training (default: %(default)s)")
-    parser.add_argument("-predict", action='store_true', help="Execute LLM prediction (default: %(default)s)")
-
-    # Parse the command-line arguments
-    args = parser.parse_args()
-    return args
+    parser.add_argument("-tb", "--train_base_filename", default='train_base.csv', help="CSV filename for StockSymbolCollection")
+    parser.add_argument("-tf", "--train_filename", default='train.csv', help="CSV filename to get the list of stock symbols for StockData")
+    parser.add_argument("-st", "--start_time", help="Start time for StockData in the format YYYY-MM-DD")
+    parser.add_argument("-et", "--end_time", help="End time for StockData in the format YYYY-MM-DD")
+    parser.add_argument("-pp", "--preprocess", action='store_true', help="Execute StockPreprocessor")
+    parser.add_argument("-train", action='store_true', help="Execute LLM training")
+    parser.add_argument("-predict", action='store_true', help="Execute LLM prediction")
 
 
 def main() -> None:
     """Main function to execute the script"""
     args = add_args()
-    if args.create_stock_collection:
+
+    if args.train_base_filename:
         StockSymbolCollection.exec(args.train_base_filename)
-    # if args.symbols and args.start_time and args.end_time:
-    #     symbols_list = args.symbols.split(',')
-    #     start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
-    #     end_time = datetime.strptime(args.end_time, '%Y-%m-%d')
-    #     StockData.exec(symbols_list, start_time, end_time)
+
+    if args.train_filename and args.start_time and args.end_time:
+        df = pd.read_csv(args.train_filename)
+        symbols_list = df['Symbol'].tolist()
+        start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
+        end_time = datetime.strptime(args.end_time, '%Y-%m-%d')
+        StockData.exec(symbols_list, start_time, end_time)
+
     if args.preprocess:
         StockPreprocessor.exec()
     if args.train:
         LLM.train()
     if args.predict:
         LLM.predict()
-
 
 def menu() -> None:
     """
@@ -119,29 +112,14 @@ def menu() -> None:
 
 if __name__ == "__main__":
     main()
-
 """
-This script creates the necessary classes and methods. You can run the script from the 
-command line using CLI arguments (Option A), or run the script and use the menu (Option B). 
-
-Please note the current state of the methods `StockSymbolCollection.exec, StockData.exec(), 
-StockPreprocessor.exec(), LLM.train() and LLM.predict()` are simple, meaning they just print 
-out some information and do not perform actual operations. You would need to replace the 
-print statements with your actual implementation.
-
-You can execute option A by providing the proper arguments in the command line after the python command:
+Now, you can run the script with the provided default values or specify new file names with the `-tb` and `-tf` flags for train_base_filename and train_filename respectively:
 
     python stock_manager.py --start_time 2023-01-01 --end_time 2023-10-01
 
-For Option B, the menu gets displayed and expects a user input:
+Or:
 
-    python stock_manager.py
-    1. Stock Symbol Verification
-    2. Stock Data Collection
-    3. Stock Preprocessor
-    4. LLM
-       4.1 LLM Training
-       4.2 LLM Prediction
-    Choose an option: '1'
+    python stock_manager.py --tb new_train_base.csv --tf new_train.csv --start_time 2023-01-01 --end_time 2023-10-01
 """
+
 
