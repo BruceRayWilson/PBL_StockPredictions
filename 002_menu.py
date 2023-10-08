@@ -4,22 +4,8 @@ import argparse
 from datetime import datetime
 import pandas as pd
 
-class StockSymbolCollection:
-    """Class to verify stock symbols"""
-
-    @staticmethod
-    def exec(csv_filename: str) -> None:
-        '''Executes the StockSymbolCollection class. Reads CSV and prints content'''
-        df = pd.read_csv(csv_filename)
-        print(df)
-
-class StockData:
-    """Class to collect stock market data"""
-
-    @staticmethod
-    def exec(csv_filename: str, start_time: datetime, end_time: datetime) -> None:
-        '''Executes the StockData class. Prints the symbols along with start and end time'''
-        print(f"Collecting data using '{csv_filename}' from '{start_time}' to '{end_time}'")
+from StockSymbolCollection.StockSymbolCollection import StockSymbolCollection
+from StockData.StockData import StockData
 
 
 class StockPreprocessor:
