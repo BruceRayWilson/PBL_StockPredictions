@@ -96,8 +96,8 @@ class StockSymbolCollection:
         self._save_to_csv('valid_tickers.csv', valid_tickers)
         self._save_to_csv('invalid_tickers.csv', invalid_tickers)
 
-        # Copy the contents of 'invalid_tickers.csv' to 'train.csv'
-        shutil.copy('invalid_tickers.csv', 'train.csv')
+        # Copy the contents of 'valid_tickers.csv' to 'train.csv'
+        shutil.copy('valid_tickers.csv', 'train.csv')
 
         # Reinitialize self.tickers with the contents of 'train.csv'
         self.tickers = self._load_tickers_from_csv('valid_tickers.csv')
