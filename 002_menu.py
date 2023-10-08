@@ -47,7 +47,8 @@ class LLM:
 def add_args():
     """Function to add command line arguments"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("-cc", "--create_stock_collection", action="store_true",
+    parser.add_argument("-m", "--menu", action='store_true', help="Enable the menu (default: %(default)s)")
+    parser.add_argument("-ssv", "--stock_symbol_verification", action="store_true",
                         help="Flag to create a stock collection (default: %(default)s)")
     parser.add_argument("-tb", "--train_base_filename", default='train_base.csv',
                         help="CSV filename for StockSymbolCollection (default: %(default)s)")
@@ -71,23 +72,26 @@ def add_args():
 def main() -> None:
     """Main function to execute the script"""
     args = add_args()
-    if args.create_stock_collection:
-        StockSymbolCollection.exec(args.train_base_filename)
-    if args.collect_stock_data:
-        start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
-        end_time   = datetime.strptime(args.end_time,   '%Y-%m-%d')
-        StockData.exec(args.train_filename, start_time, end_time)
-    if args.preprocess:
-        StockPreprocessor.exec()
-    if args.train:
-        LLM.train()
-    if args.predict:
-        LLM.predict()
+    if args.menu:
+        menu(args)
+    else:
+        if args.stock_symbol_verification:
+            StockSymbolCollection.exec(args.train_base_filename)
+        if args.collect_stock_data:
+            start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
+            end_time   = datetime.strptime(args.end_time,   '%Y-%m-%d')
+            StockData.exec(args.train_filename, start_time, end_time)
+        if args.preprocess:
+            StockPreprocessor.exec()
+        if args.train:
+            LLM.train()
+        if args.predict:
+            LLM.predict()
 
     print("Done!")
 
 
-def menu() -> None:
+def menu(args) -> None:
     """
     Displays a menu for users who run the script without CLI arguments
     """
@@ -103,14 +107,9 @@ def menu() -> None:
         csv_filename = 'train_base.csv'
         StockSymbolCollection.exec(csv_filename)
     elif choice == '2':
-        csv_filename = 'train.csv'
-        df = pd.read_csv(csv_filename)
-        symbols_list = df['Symbol'].tolist()
-        start_time = input("Enter start time (YYYY-MM-DD): ")
-        end_time = input("Enter end time (YYYY-MM-DD): ")
-        start_time = datetime.strptime(start_time, '%Y-%m-%d')
-        end_time = datetime.strptime(end_time, '%Y-%m-%d')
-        StockData.exec(symbols_list, start_time, end_time)
+        start_time = datetime.strptime(args.start_time, '%Y-%m-%d')
+        end_time   = datetime.strptime(args.end_time,   '%Y-%m-%d')
+        StockData.exec(args.train_filename, start_time, end_time)
     elif choice == '3':
         StockPreprocessor.exec()
     elif choice == '4':
