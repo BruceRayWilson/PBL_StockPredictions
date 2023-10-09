@@ -42,7 +42,7 @@ def add_args():
                         help="CSV filename to get the list of stock symbols for StockData (default: %(default)s)")
     parser.add_argument("-csd", "--collect_stock_data", action='store_true',
                         help="Flag to collect stock data (default: %(default)s)")
-    parser.add_argument("-st", "--start_time", default="2023-01-01",
+    parser.add_argument("-st", "--start_time", default="2022-01-01",
                         help="Start time for StockData in the format YYYY-MM-DD (default: %(default)s)")
     parser.add_argument("-et", "--end_time", default="2023-10-01",
                         help="End time for StockData in the format YYYY-MM-DD (default: %(default)s)")
