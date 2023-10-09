@@ -47,7 +47,7 @@ class StockData:
         """
         filepath = os.path.join(self.data_dir, f"{symbol}.csv")
         if not os.path.exists(filepath):
-            print(f'File {filepath} does not exist.')
+            print(f'File {filepath} does not exist.  Gathering stock data now.')
             symbol_ticker = yf.Ticker(symbol)
             df_symbol = symbol_ticker.history(start=self.start_time, end=self.end_time)
             df_symbol.to_csv(filepath)

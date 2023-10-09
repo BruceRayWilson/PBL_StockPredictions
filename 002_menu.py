@@ -59,7 +59,8 @@ def main() -> None:
     """Main function to execute the script"""
     args = add_args()
     if args.menu:
-        menu(args)
+        while True:
+            menu(args)
     else:
         if args.stock_symbol_verification:
             StockSymbolCollection.exec(args.train_base_filename)
