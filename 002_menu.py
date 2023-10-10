@@ -6,15 +6,8 @@ import pandas as pd
 
 from StockSymbolCollection.StockSymbolCollection import StockSymbolCollection
 from StockData.StockData import StockData
+from StockPreprocessor.StockPreprocessor import StockPreprocessor
 
-
-class StockPreprocessor:
-    """Class to preprocess collected stock market data"""
-
-    @staticmethod
-    def exec() -> None:
-        '''The method just prints a success message as of now'''
-        print("Preprocessing data...")
 
 class LLM:
     """Class to manage Linear Level Models (LLM) for stock market data analysis"""

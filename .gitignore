@@ -1,6 +1,7 @@
 # Project specific
 data/
 StockPreprocessorData/coding/
+preprocessed_data/
 
 
 # Byte-compiled / optimized / DLL files
