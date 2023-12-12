@@ -4,6 +4,14 @@
 
 This code was written by AutoGen + GPT4 with updates from Chat-GPT4.
 
+## New features
+
+BackTesting/BackTesting.py was created on 12/12/2023.
+
+It was generated from BackTesting/main_001_back_testing.py in a single pass!
+
+It took less than 30 minutes total.  I did start from a pre-existing main*.py template.
+
 ## Running
 
 ```bash
